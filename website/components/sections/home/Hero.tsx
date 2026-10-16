@@ -1,30 +1,66 @@
-export default function Hero() {
-  const whatsappNumber = "573147416370";
-  const whatsappMsg = "Hola%20Garc%C3%ADa%20Glass%2C%20vi%20su%20p%C3%A1gina%20y%20quiero%20cotizar";
+"use client"
+import { useState, useEffect } from "react"
+import Link from "next/link"
 
-  return (
-    <section id="inicio" className="relative min-h-screen overflow-hidden bg-[#0b2d50] text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b2d50] via-[#0d3763] to-[#0b4380]" />
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1500px] flex-col justify-center px-6 py-24 sm:px-10 lg:px-16">
-        <div className="mb-10 inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3">
-          <span className="h-3 w-3 rounded-full bg-[#5eb2ff]" />
-          <span className="text-sm font-semibold tracking-[0.18em] text-white/85">VIDRIO & ALUMINIO PREMIUM</span>
-        </div>
-        <h1 className="max-w-5xl text-6xl font-bold leading-[0.95] tracking-[-0.04em] sm:text-7xl lg:text-[92px]">
-          Diseñamos espacios<br />que<br /><span className="text-[#61b1ff]">hablan de ti.</span>
-        </h1>
-        <p className="mt-10 max-w-3xl text-lg leading-8 text-white/75 sm:text-xl">
-          Soluciones en vidrio y aluminio diseñadas para transformar hogares, oficinas y proyectos arquitectónicos.
-        </p>
-        <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-          <a href={`https://wa.me/${whatsappNumber}?text=${whatsappMsg}`} target="_blank" className="inline-flex h-14 items-center justify-center gap-4 rounded-full bg-[#0878e8] px-8 font-bold hover:bg-[#1686f5]">
-            Solicitar cotización <span>→</span>
-          </a>
-          <a href="#portafolio" className="inline-flex h-14 items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 font-bold hover:bg-white/10">
-            Ver nuestros proyectos
-          </a>
-        </div>
-      </div>
-    </section>
-  );
+const slides = [
+ {
+  img: "/images/cabina-bano-lujo.jpg",
+  categoria: "CABINAS",
+  titulo: "Cabinas de baño de lujo",
+  desc: "Vidrio templado 10mm con accesorios negro mate"
+ },
+ {
+  img: "/images/ventanal-industrial.jpg",
+  categoria: "VENTANERÍA",
+  titulo: "Ventanales industriales tipo loft",
+  desc: "Estructuras en aluminio y vidrio laminado"
+ },
+ {
+  img: "/images/division-oficina.jpg",
+  categoria: "ESTRUCTURAS",
+  titulo: "Divisiones de oficina en vidrio",
+  desc: "Espacios modernos que inspiran transparencia"
+ }
+]
+
+export default function Hero(){
+ const [current, setCurrent] = useState(0)
+
+ useEffect(()=>{
+  const timer = setInterval(()=> setCurrent((c)=>(c+1)%slides.length), 4000)
+  return ()=> clearInterval(timer)
+ },[])
+
+ return (
+  <section id="inicio" className="relative h-[90vh] overflow-hidden bg-[#0D1B2A]">
+   {slides.map((s,i)=>(
+    <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i===current? "opacity-100" : "opacity-0"}`}>
+     <img src={s.img} alt={s.titulo} className="w-full h-full object-cover" />
+     {/* Degradado suave que pediste para contraste del título */}
+     <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A] via-[#0D1B2A]/40 to-transparent" />
+     <div className="absolute inset-0 bg-gradient-to-r from-[#0D1B2A]/80 to-transparent" />
+    </div>
+   ))}
+
+   <div className="relative z-10 container mx-auto px-6 h-full flex items-end pb-20">
+    <div className="max-w-2xl">
+     <span className="bg-[#1687A7] text-white text-xs font-bold px-3 py-1 rounded-full tracking-widest">{slides[current].categoria}</span>
+     <h1 className="text-white text-5xl md:text-6xl font-extrabold mt-4 leading-[0.95]">{slides[current].titulo}</h1>
+     <p className="text-[#D6DCE1] mt-4 text-lg">{slides[current].desc}</p>
+     <div className="mt-8 flex gap-4">
+      <Link href={`/proyectos/${slides[current].titulo.toLowerCase().replaceAll(" ","-")}`} className="bg-white text-[#0D1B2A] px-8 py-3 rounded-full font-bold hover:bg-[#1687A7] hover:text-white transition">
+       Ver proyecto
+      </Link>
+      <a href="#proyectos" className="border border-white/30 text-white px-8 py-3 rounded-full hover:bg-white/10 transition">Explorar catálogo</a>
+     </div>
+
+     <div className="flex gap-2 mt-10">
+      {slides.map((_,i)=>(
+       <button key={i} onClick={()=>setCurrent(i)} className={`h-1 rounded-full transition-all ${i===current? "w-10 bg-[#1687A7]" : "w-6 bg-white/40"}`} />
+      ))}
+     </div>
+    </div>
+   </div>
+  </section>
+ )
 }

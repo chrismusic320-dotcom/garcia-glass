@@ -1,26 +1,38 @@
-const projects = [
-  { number: "01", category: "Cabinas de baño", title: "Cabinas en vidrio templado", description: "Soluciones personalizadas..." },
-  { number: "02", category: "Fachadas", title: "Fachadas en vidrio y aluminio", description: "Diseños contemporáneos..." },
-  { number: "03", category: "Ventanería", title: "Ventanería en aluminio", description: "Sistemas funcionales..." },
-  { number: "04", category: "Pasamanos", title: "Pasamanos en vidrio", description: "Diseños minimalistas..." },
-];
+import Link from "next/link"
+import { proyectos } from "@/lib/proyectos"
+
 export default function Portfolio() {
   return (
-    <section id="portafolio" className="bg-white px-6 py-24 text-[#0b2d50] sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-[1500px]">
-        <p className="text-sm font-bold tracking-[0.2em] text-[#0878e8]">NUESTROS PROYECTOS</p>
-        <h2 className="mt-4 text-5xl font-bold">Proyectos que <span className="text-[#0878e8]">hablan por sí solos.</span></h2>
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
-          {projects.map((p) => (
-            <article key={p.number} className="rounded-3xl border bg-[#f7faff] p-8">
-              <p className="text-sm font-bold tracking-[0.15em] text-[#0878e8]">{p.category}</p>
-              <h3 className="mt-4 text-2xl font-bold">{p.title}</h3>
-              <p className="mt-3 text-[#0b2d50]/60">{p.description}</p>
-              <a href={`https://wa.me/573147416370?text=${encodeURIComponent(`Hola García Glass, me interesa: ${p.title}`)}`} target="_blank" className="mt-6 inline-block font-bold text-[#0878e8]">Cotizar →</a>
-            </article>
+    <section id="proyectos" className="py-24 bg-[#F7F9FA]">
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="text-4xl font-extrabold text-[#0D1B2A]">Nuestros proyectos</h2>
+            <p className="text-[#1E3A5F] mt-2">Cada imagen corresponde a un artículo real</p>
+          </div>
+          <Link href="/proyectos" className="hidden md:block text-[#1687A7] font-bold">
+            Ver catálogo completo →
+          </Link>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {proyectos.slice(0, 3).map((p) => (
+            <Link
+              key={p.slug}
+              href={`/proyectos/${p.slug}`}
+              className="group relative h-[420px] rounded-[24px] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
+            >
+              <img src={p.img} alt={p.titulo} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A] via-[#0D1B2A]/20 to-transparent opacity-90" />
+              <div className="absolute bottom-0 p-6">
+                <span className="text-[#1687A7] text-[11px] font-bold tracking-widest bg-white/90 px-2 py-1 rounded">{p.categoria}</span>
+                <h3 className="text-white text-2xl font-bold mt-3 leading-tight">{p.titulo}</h3>
+                <p className="text-white/70 text-sm mt-2 line-clamp-2">{p.desc}</p>
+                <span className="inline-block mt-4 text-white text-sm border-b border-[#1687A7] pb-1">Explorar proyecto →</span>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
     </section>
-  );
+  )
 }
